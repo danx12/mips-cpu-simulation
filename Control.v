@@ -58,7 +58,7 @@ begin
 
 	
 	//lw
-	if(instrWord[31:26] == 6'b100011 )begin //opcode for lw
+	else if(instrWord[31:26] == 6'b100011 )begin //opcode for lw
 	
 	
 	RegDest = 0;
@@ -80,7 +80,7 @@ begin
 	end
 	
 	//sw
-	if(instrWord[31:26] == 6'b101011)begin // opcode for sw
+	else if(instrWord[31:26] == 6'b101011)begin // opcode for sw
 	
 	RegDest = 1'bx;    // x
 	ALUSrc = 1;
@@ -92,15 +92,31 @@ begin
 	ALUOp1 = 0;
 	ALUOp0 = 0;
 	
+	end
+	
+	else if(instrWord[31:26] !== 6'b000000 | 6'b100011 | 6'b101011) begin // instructions that will give dontcares
+	
+	RegDest = 1'bx;    
+	ALUSrc = 1'bx;
+	MemToReg = 1'bx;	
+	RegWrite = 1'bx;
+	MemRead = 1'bx;
+	MemWrite = 1'bx;
+	Branch = 1'bx;	
+	ALUOp1 = 1'bx;
+	ALUOp0 = 1'bx;
+	
+	
+	end
+	
 
 
 	
-	end
+	
 	
 	end
 	
 	endmodule
-	
 	
 
 	
