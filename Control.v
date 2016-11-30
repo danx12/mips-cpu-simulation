@@ -99,9 +99,9 @@ begin
 	RegDest = 1'bx;    
 	ALUSrc = 1'bx;
 	MemToReg = 1'bx;	
-	RegWrite = 1'bx;
+	RegWrite = 0;        //no ops dont write to reg
 	MemRead = 1'bx;
-	MemWrite = 1'bx;
+	MemWrite = 0;        //no ops dont write to mem
 	Branch = 1'bx;	
 	ALUOp1 = 1'bx;
 	ALUOp0 = 1'bx;
