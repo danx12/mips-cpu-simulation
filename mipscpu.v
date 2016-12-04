@@ -2,8 +2,13 @@ module mipscpu(input wire reset, input wire clock, input wire [31:0] instrword,i
 	
 	
 	//Instantiate datapath
-	reg d_RegDst,d_MemRead,d_MemtoReg,d_MemWrite,d_ALUSrc,d_RegWrite;
-	reg [3:0] d_ALUCtrl;
+	reg d_RegDst = 0;
+	reg d_MemRead=0;
+	reg d_MemtoReg=0;
+	reg d_MemWrite=0;
+	reg d_ALUSrc=0;
+	reg d_RegWrite=0;
+	reg [3:0] d_ALUCtrl = 0;
 	
 	datapath myDatapath(
 		.instruction(instrword),
@@ -17,9 +22,8 @@ module mipscpu(input wire reset, input wire clock, input wire [31:0] instrword,i
 	);
 	
 	//Instantiate controlpath
-	
 	wire RegDst,RegWrite,ALUSrc,MemRead,MemWrite,MemToReg,Branch;
-	wire [1:0] ALUOp;
+	wire [1:0] ALUOp = 0;
 	
 	ControlPath myControlPath(
 		.instrWord(instrword),
@@ -35,8 +39,7 @@ module mipscpu(input wire reset, input wire clock, input wire [31:0] instrword,i
 	);
 	
 	//Instantiate ALU Control
-	
-	wire [3:0] ALUCtrl;
+	wire [3:0] ALUCtrl= 0;
 	
 	alucontrol myALUControl(
 		.aluop(ALUOp),
@@ -48,36 +51,66 @@ module mipscpu(input wire reset, input wire clock, input wire [31:0] instrword,i
 	
 	//Define labels for the values of the different states.
 	localparam [1:0]
-    id  = 2'b00,
-    ex    = 2'b01,
-    mem = 2'b10,
-    wb = 2'b11;
+	id  = 2'b00,
+	ex    = 2'b01,
+	mem = 2'b10,
+	wb = 2'b11;
     
     
-    //FSM 
-    
-    reg [1:0] state, nextState;
+    //FSM
+    reg [1:0] state = id;
+    //reg [1:0] nextState=ex;
     integer i;
     always @(posedge clock or posedge reset or posedge newinstr) begin
-			if(reset) begin
-				state <= id;
-				
-	        	for (i=0; i<32; i=i+1) begin
-	        			myDatapath.registerfile_instance.registerFile[i] = 32'b0;
-      			end
-      			for (i=0; i<128; i=i+1) begin
-	        			myDatapath.memory_instance.memoryFile[i] = 32'b0;
-      			end
-				
-			end
-			else if(clock) begin
-				state <= nextState;
-			end
-			else begin //newinstr
-				state <= id;
-			end
-					
+	if(reset) begin
+	 //state <= id;	
+         for (i=0; i<32; i=i+1) begin
+          myDatapath.registerfile_instance.registerFile[i] = 32'b0; //Go into the cpu's register file and clear all data
+     	 end
+   	 
+	 for (i=0; i<128; i=i+1) begin
+          myDatapath.memory_instance.memoryFile[i] = 32'b0; //Go into memory and clear all data
+      	 end
+
 	end
+	
+	else if(clock) begin 
+	 //state <= nextState;
+	 case(state)
+          id: begin //Do nothing. Allow this clock cycle to decode and set the signals in the control path
+	    state=ex;
+	   end
+	 
+	  ex: begin
+	   d_RegDst = RegDst;
+	   d_ALUCtrl=ALUCtrl;
+	   d_ALUSrc=ALUSrc;
+	   d_MemtoReg=MemToReg; 
+	   //d_Branch=Branch; //not implemented
+	   state=mem;
+	   $display("exec...");
+ 	  end
+
+	  mem: begin
+	   d_MemRead=MemRead;
+	   #1 d_MemRead=0; //reset signal back to zero
+	   d_MemWrite=MemWrite; //R/W autonmous protection in the memory module 
+	   #1 d_MemWrite = 0;
+	   state=wb;
+	   $display("memRead");
+	  end
+	
+	  wb: begin
+   	   d_RegWrite=RegWrite;
+	  #1 d_RegWrite=0;//reset signal back to zero
+	  end
+	  endcase
+	end
+	
+	else begin //newinstr
+	 state=id;
+	end			
+    end
     
     
 	

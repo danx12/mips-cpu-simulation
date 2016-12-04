@@ -1,9 +1,9 @@
 module memory(input wire [6:0] address, input wire [31:0] writeData, input wire trigWrite, input wire trigRead, output reg [31:0] readData);
 
-	reg [31:0] memoryFile [127:0];
+	reg [31:0]memoryFile[127:0];
 	
 	
-//	//This are flashed always in memory.
+	//This are flashed always in memory.
 //	initial begin
 //	memoryFile[0] = 10;
 //	memoryFile[1] = 22;

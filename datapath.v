@@ -107,10 +107,10 @@ module alu(input wire [31:0] op1,input wire [31:0] op2,input wire [3:0] ctrl,out
 			opNor: begin
 				result = op1 ~| op2;
 			end
+			//default: result = op1 + op2;
 
 		endcase
-
-
+		$display("op1: %d, op2: %d, ctrl: %d, result: %d", op1, op2, ctrl, result);
 	end
 
 endmodule
@@ -119,7 +119,7 @@ endmodule
 module twotoonemux(input wire [31:0] input1,input wire [31:0] input2,input wire sel,output wire [31:0] outputval);
 	
 	//Simply select input 1 (sel ==0) or input 2 (sel ~=0 or sel==1).
-	assign outputval = sel == 0 ? input1 : input2;
+	assign outputval = (sel == 0) ? input1 : input2;
 
 endmodule
 
