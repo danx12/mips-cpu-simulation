@@ -4,7 +4,7 @@ module alucontrol_v2(aluOp0,aluOp1,fun,aluctrl);
 	input wire [5:0] fun;
 	output reg [3:0] aluctrl;
 	
-	always @ (aluop or fun) begin
+	always @ (aluOp0 or aluOp1 or fun) begin
 		casex({aluOp1,aluOp0,fun})
 			8'b00??????: begin
 				aluctrl = 4'b0010;
