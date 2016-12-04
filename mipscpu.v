@@ -23,15 +23,15 @@ module mipscpu(input wire reset, input wire clock, input wire [31:0] instrword,i
 	
 	//Instantiate controlpath
 	wire RegDst,RegWrite,ALUSrc,MemRead,MemWrite,MemToReg,Branch;
-	wire [1:0] ALUOp;
+	wire ALUOp0,ALUOp1;
 	
 	ControlPath myControlPath(
 		.instrWord(instrword),
 		.RegDest(RegDst),
 		.RegWrite(RegWrite),
 		.ALUSrc(ALUSrc),
-		.ALUOp1(ALUOp[1]),//switched ALUOp[0] to ALUOp[1]
-		.ALUOp0(ALUOp[0]),//switched ALUOp[1] to ALUOp[0]
+		.ALUOp0(ALUOp0),
+		.ALUOp1(ALUOp1),
 		.MemRead(MemRead),
 		.MemWrite(MemWrite),
 		.MemToReg(MemToReg),
@@ -42,7 +42,8 @@ module mipscpu(input wire reset, input wire clock, input wire [31:0] instrword,i
 	wire [3:0] ALUCtrl;
 	
 	alucontrol_v2 myALUControl(
-		.aluop(ALUOp),
+		.aluOp0(ALUOp0),
+		.aluOp1(ALUOp1),
 		.fun(instrword[5:0]),
 		.aluctrl(ALUCtrl)
 	);
