@@ -12,6 +12,7 @@ module cpu_testbench();
 	
  	mipscpu myCPU(reset, clock, instrword, newinstr);
  	
+	//Set up wave form viewer
 	initial begin
 		clock = 0;
 		$dumpfile("outputSignals.vcd");
@@ -21,20 +22,18 @@ module cpu_testbench();
 	initial begin
 		
 //-------------initialization--------------
+		//Clear all memory and register contents & init to zero
 		reset = 1;
-		#5
-		reset = 0;
-	
-		myCPU.myDatapath.registerfile_instance.registerFile[0]=0;
-		myCPU.myDatapath.registerfile_instance.registerFile[1]=0;
-//		myCPU.myDatapath.registerfile_instance.registerFile[31]=0; //guarantee a zero in reg 31
+		#5 reset = 0;
+		
+		//Set memory values
 		myCPU.myDatapath.memory_instance.memoryFile[0]=10; //variable a = 10
 		myCPU.myDatapath.memory_instance.memoryFile[1]=22; //variable b = 22
 		myCPU.myDatapath.memory_instance.memoryFile[2]=6; //variable c = 6
 		
+//------------Load words from mem to reg--------------	
 		
-//------------Load words--------------	
-		//lw  lw $1, 1($0);	
+	//lw $1, 1($0);	
 		op = 6'd35;
 		rs = 5'd0;
 		rt = 5'd1;
@@ -43,9 +42,9 @@ module cpu_testbench();
 		newinstr=0;
 		#1 newinstr=1;
 		#1 newinstr=0;
-		#100;
+		#70;
 		
-		//lw  lw $1,2($0);		 
+	//lw $2,2($0);		 
 		op = 6'd35;
 		rs = 5'd0;
 		rt = 5'd2;
@@ -53,9 +52,9 @@ module cpu_testbench();
 		instrword = {op,rs,rt,imm};
 		#1 newinstr=1;
 		#1 newinstr=0;
-		#100;
+		#70;
 		 
-		//lw  lw $1, 3($0);
+	//lw $3, 3($0);
 		op = 6'd35;
 		rs = 5'd0;
 		rt = 5'd3;
@@ -63,14 +62,12 @@ module cpu_testbench();
 		instrword = {op,rs,rt,imm};
 		#1 newinstr=1;
 		#1 newinstr=0;
-		#100;
+		#70;
 
-		$display("%s%d", "Value at register one: ", myCPU.myDatapath.registerfile_instance.registerFile[1]);
-		$display("%s%d", "Value at register two: ", myCPU.myDatapath.registerfile_instance.registerFile[2]);
-		$display("%s%d", "Value at register three: ", myCPU.myDatapath.registerfile_instance.registerFile[3]);
 
 //--------------Add & subtract-------------------
 
+	//add $4, $1, $2;
 		op = 6'd00; //Register Arithmetic logical operation
 		rd= 5'd4;
 		rs = 5'd1;
@@ -80,9 +77,9 @@ module cpu_testbench();
 		instrword = {op,rs,rt,rd,shift,fun};
 		#1 newinstr=1;
 		#1 newinstr=0;
-		#100;
-		$display("%s%d", "Value at register four: ", myCPU.myDatapath.registerfile_instance.registerFile[4]);
+		#70;
 
+	//sub $5, $4, $3;
 		op = 6'd00;
 		rd= 5'd5;
 		rs = 5'd4;
@@ -92,10 +89,35 @@ module cpu_testbench();
 		instrword = {op,rs,rt,rd,shift,fun};
 		#1 newinstr=1;
 		#1 newinstr=0;
-		#100;
-		$display("%s%d", "Value at register five: ", myCPU.myDatapath.registerfile_instance.registerFile[5]);
+		#70;
 
-		$finish;
+//-----------Store Word--------------
+
+	//sw $5, 3($0);	
+		op = 6'd43;
+		rs = 5'd0;
+		rt = 5'd5;
+		imm = 16'd3;
+		instrword = {op,rs,rt,imm};
+		newinstr=0;
+		#1 newinstr=1;
+		#1 newinstr=0;
+		#70;
+
+
+
+//----------Print values in registers
+		$display("d = a+b-c");
+		$display("a = %d", myCPU.myDatapath.memory_instance.memoryFile[0]);
+		$display("b = %d", myCPU.myDatapath.memory_instance.memoryFile[1]);
+		$display("c = %d", myCPU.myDatapath.memory_instance.memoryFile[2]);
+		$display("d = %d", myCPU.myDatapath.memory_instance.memoryFile[3]);
+		
+	
+
+	$finish;
+
+
 	end
 
 

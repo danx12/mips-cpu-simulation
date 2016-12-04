@@ -110,7 +110,6 @@ module alu(input wire [31:0] op1,input wire [31:0] op2,input wire [3:0] ctrl,out
 			//default: result = op1 + op2;
 
 		endcase
-		$display("op1: %d, op2: %d, ctrl: %b, result: %d", op1, op2, ctrl, result);
 	end
 
 endmodule
