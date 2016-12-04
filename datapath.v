@@ -65,8 +65,6 @@ module datapath(instruction,RegDst,MemRead,MemtoReg,ALUCtrl,MemWrite,ALUSrc,RegW
 	
 	
 	
-	
-	
 endmodule
 	
 
