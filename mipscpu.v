@@ -41,7 +41,7 @@ module mipscpu(input wire reset, input wire clock, input wire [31:0] instrword,i
 	//Instantiate ALU Control
 	wire [3:0] ALUCtrl= 0;
 	
-	alucontrol myALUControl(
+	alucontrol_v2 myALUControl(
 		.aluop(ALUOp),
 		.fun(instrword[5:0]),
 		.aluctrl(ALUCtrl)
