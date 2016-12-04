@@ -47,7 +47,7 @@ module datapath(instruction,RegDst,MemRead,MemtoReg,ALUCtrl,MemWrite,ALUSrc,RegW
 	);
 	
 	memory memory_instance(
-		.address(aluOutput),
+		.address(aluOutput[6:0]),
 		.writeData(readData2), 
 		.trigWrite(MemWrite), 
 		.trigRead(MemRead), 
