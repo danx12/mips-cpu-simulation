@@ -15,7 +15,7 @@ module datapath(instruction,RegDst,MemRead,MemtoReg,ALUCtrl,MemWrite,ALUSrc,RegW
 	wire [31:0] readFromMemory;
 	wire [31:0] writeDataToReg;
 	
-	assign writeRegisterMux = RegDst ? instruction[20:16] : instruction[15:11];
+	assign writeRegisterMux = RegDst == 0 ? instruction[20:16] : instruction[15:11];
 	
 	registerfile  registerfile_instance (
 		.readReg1(instruction[25:21]),
