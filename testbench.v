@@ -20,58 +20,81 @@ module cpu_testbench();
 
 	initial begin
 		
+//-------------initialization--------------
 		reset = 1;
 		#5
 		reset = 0;
 	
 		myCPU.myDatapath.registerfile_instance.registerFile[0]=0;
 		myCPU.myDatapath.registerfile_instance.registerFile[1]=0;
-		myCPU.myDatapath.registerfile_instance.registerFile[31]=0; //guarantee a zero in reg 31
+//		myCPU.myDatapath.registerfile_instance.registerFile[31]=0; //guarantee a zero in reg 31
 		myCPU.myDatapath.memory_instance.memoryFile[0]=10; //variable a = 10
 		myCPU.myDatapath.memory_instance.memoryFile[1]=22; //variable b = 22
-		myCPU.myDatapath.memory_instance.memoryFile[2]=6; //variable a = 6
+		myCPU.myDatapath.memory_instance.memoryFile[2]=6; //variable c = 6
 		
 		
-		
-		op = 6'd35; //lw
+//------------Load words--------------	
+		//lw  lw $1, 1($0);	
+		op = 6'd35;
 		rs = 5'd0;
 		rt = 5'd1;
 		imm = 16'd0;
-		
-		// instrword = 32'b10001111111000010000000000000000;// lw $1, 0($0)
 		instrword = {op,rs,rt,imm};
 		newinstr=0;
 		#1 newinstr=1;
 		#1 newinstr=0;
 		#100;
 		
-		 
-		op = 6'd35; //lw
+		//lw  lw $1,2($0);		 
+		op = 6'd35;
 		rs = 5'd0;
 		rt = 5'd2;
 		imm = 16'd1;
-		// instrword = 32'b10001111111000100000000000000001;// lw $2, 1($0)
 		instrword = {op,rs,rt,imm};
 		#1 newinstr=1;
 		#1 newinstr=0;
 		#100;
 		 
-		op = 6'd35; //lw
+		//lw  lw $1, 3($0);
+		op = 6'd35;
 		rs = 5'd0;
 		rt = 5'd3;
 		imm = 16'd2;
-		// instrword = 32'b10001111111000110000000000000010;// lw $2, 2($0)
 		instrword = {op,rs,rt,imm};
 		#1 newinstr=1;
 		#1 newinstr=0;
 		#100;
-		
-		
+
 		$display("%s%d", "Value at register one: ", myCPU.myDatapath.registerfile_instance.registerFile[1]);
 		$display("%s%d", "Value at register two: ", myCPU.myDatapath.registerfile_instance.registerFile[2]);
 		$display("%s%d", "Value at register three: ", myCPU.myDatapath.registerfile_instance.registerFile[3]);
-		
-		#100
+
+//--------------Add & subtract-------------------
+
+		op = 6'd00; //Register Arithmetic logical operation
+		rd= 5'd4;
+		rs = 5'd1;
+		rt = 5'd2;
+		shift = 0;
+		fun = 6'd32; //add operand
+		instrword = {op,rs,rt,rd,shift,fun};
+		#1 newinstr=1;
+		#1 newinstr=0;
+		#100;
+		$display("%s%d", "Value at register four: ", myCPU.myDatapath.registerfile_instance.registerFile[4]);
+
+		op = 6'd00;
+		rd= 5'd5;
+		rs = 5'd4;
+		rt = 5'd3;
+		shift = 0;
+		fun = 6'd34; //subtract operand
+		instrword = {op,rs,rt,rd,shift,fun};
+		#1 newinstr=1;
+		#1 newinstr=0;
+		#100;
+		$display("%s%d", "Value at register five: ", myCPU.myDatapath.registerfile_instance.registerFile[5]);
+
 		$finish;
 	end
 

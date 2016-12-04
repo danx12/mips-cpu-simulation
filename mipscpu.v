@@ -30,8 +30,8 @@ module mipscpu(input wire reset, input wire clock, input wire [31:0] instrword,i
 		.RegDest(RegDst),
 		.RegWrite(RegWrite),
 		.ALUSrc(ALUSrc),
-		.ALUOp1(ALUOp[0]),
-		.ALUOp0(ALUOp[1]),
+		.ALUOp1(ALUOp[1]),//switched ALUOp[0] to ALUOp[1]
+		.ALUOp0(ALUOp[0]),//switched ALUOp[1] to ALUOp[0]
 		.MemRead(MemRead),
 		.MemWrite(MemWrite),
 		.MemToReg(MemToReg),
@@ -63,7 +63,6 @@ module mipscpu(input wire reset, input wire clock, input wire [31:0] instrword,i
     integer i;
    	always @(posedge clock or posedge reset or posedge newinstr) begin
 		if(reset) begin
-		 //state <= id;	
 	         for (i=0; i<32; i=i+1) begin
 	          myDatapath.registerfile_instance.registerFile[i] = 32'b0; //Go into the cpu's register file and clear all data
 	     	 end
@@ -75,30 +74,26 @@ module mipscpu(input wire reset, input wire clock, input wire [31:0] instrword,i
 		end
 		
 		else if(clock) begin 
-			 //state <= nextState;
 			 case(state)
 		          id: begin //Do nothing. Allow this clock cycle to decode and set the signals in the control path
 			    state=ex;
-			     $display("id...");
 			   end
 			 
 			  ex: begin
-			  $display("exec...");
-//			   d_RegDst = RegDst;
-//			   d_ALUCtrl=ALUCtrl;
-//			   d_ALUSrc=ALUSrc;
-//			   d_MemtoReg=MemToReg; 
+			   d_RegDst = RegDst;
+			   d_ALUCtrl=ALUCtrl;
+			   d_ALUSrc=ALUSrc;
+			   d_MemtoReg=MemToReg; 
 			   //d_Branch=Branch; //not implemented
 			   state=mem;
 		 	  end
 		
 			  mem: begin
-			  $display("memRead...");
 			  //From previous
-//			  d_RegDst = RegDst;
-//			  d_ALUCtrl=ALUCtrl;
-//			  d_ALUSrc=ALUSrc;
-//			  d_MemtoReg=MemToReg; 
+			  d_RegDst = RegDst;
+			  d_ALUCtrl=ALUCtrl;
+			  d_ALUSrc=ALUSrc;
+			  d_MemtoReg=MemToReg; 
 			  
 			  
 			  //Edge-sensitive
@@ -111,12 +106,11 @@ module mipscpu(input wire reset, input wire clock, input wire [31:0] instrword,i
 			  end
 			
 			  wb: begin
-			   $display("wb...");
 			  	//From previous
-//			  d_RegDst = RegDst;
-//			  d_ALUCtrl=ALUCtrl;
-//			  d_ALUSrc=ALUSrc;
-//			  d_MemtoReg=MemToReg; 
+			  d_RegDst = RegDst;
+			  d_ALUCtrl=ALUCtrl;
+			  d_ALUSrc=ALUSrc;
+			  d_MemtoReg=MemToReg; 
 			  	
 			  	//Edge sensitive
 		   	   d_RegWrite=RegWrite;
