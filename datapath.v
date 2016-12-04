@@ -7,7 +7,7 @@ module datapath(instruction,RegDst,MemRead,MemtoReg,ALUCtrl,MemWrite,ALUSrc,RegW
 	input wire RegDst,MemRead,MemtoReg,MemWrite,ALUSrc,RegWrite;
 	input wire [3:0] ALUCtrl;
 	
-	wire writeRegisterMux;
+	wire [4:0] writeRegisterMux;
 	wire [31:0] readData1, readData2;
 	wire [31:0] signExtendOutput;
 	wire [31:0] aluOp2MuxOutput;
