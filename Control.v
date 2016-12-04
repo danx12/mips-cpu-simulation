@@ -61,7 +61,7 @@ begin
 	else if(instrWord[31:26] == 6'b100011 )begin //opcode for lw
 	
 	
-	RegDest = 1;
+	RegDest = 0;
 	ALUSrc = 1;
 	MemToReg = 1;	
 	RegWrite = 1;
