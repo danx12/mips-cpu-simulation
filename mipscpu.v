@@ -62,8 +62,8 @@ module mipscpu(input wire reset, input wire clock, input wire [31:0] instrword,i
     reg [1:0] state = id;
     //reg [1:0] nextState=ex;
     integer i;
-   	always @(posedge clock or posedge reset or posedge newinstr) begin
-		if(reset) begin
+   	always @(posedge reset) begin
+		
 	         for (i=0; i<32; i=i+1) begin
 	          myDatapath.registerfile_instance.registerFile[i] = 32'b0; //Go into the cpu's register file and clear all data
 	     	 end
@@ -72,21 +72,21 @@ module mipscpu(input wire reset, input wire clock, input wire [31:0] instrword,i
 	          myDatapath.memory_instance.memoryFile[i] = 32'b0; //Go into memory and clear all data
 	      	 end
 	
-		end
 		
-		else if(clock) begin 
+	end
+	always @(posedge clock) begin
 			 case(state)
-		          id: begin //Do nothing. Allow this clock cycle to decode and set the signals in the control path
-			    state=ex;
-			   end
+		    	id: begin //Do nothing. Allow this clock cycle to decode and set the signals in the control path
+			    	state=ex;
+			   	end
 			 
 			  ex: begin
-			   d_RegDst = RegDst;
-			   d_ALUCtrl=ALUCtrl;
-			   d_ALUSrc=ALUSrc;
-			   d_MemtoReg=MemToReg; 
-			   //d_Branch=Branch; //not implemented
-			   state=mem;
+				   d_RegDst = RegDst;
+				   d_ALUCtrl=ALUCtrl;
+				   d_ALUSrc=ALUSrc;
+				   d_MemtoReg=MemToReg; 
+				   //d_Branch=Branch; //not implemented
+				   state=mem;
 		 	  end
 		
 			  mem: begin
@@ -121,14 +121,14 @@ module mipscpu(input wire reset, input wire clock, input wire [31:0] instrword,i
 		  endcase
 	end
 	
-	else begin //newinstr
-	state=id;
-	d_RegDst <= RegDst;
-	d_ALUCtrl <= ALUCtrl;
-  	d_ALUSrc <= ALUSrc;
-  	d_MemtoReg <= MemToReg; 
+	always @ (posedge newinstr) begin
+		state=id;
+		d_RegDst <= RegDst;
+		d_ALUCtrl <= ALUCtrl;
+		d_ALUSrc <= ALUSrc;
+		d_MemtoReg <= MemToReg; 
 	 
-	end			
+				
     end
     
     

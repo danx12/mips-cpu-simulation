@@ -24,12 +24,12 @@ module cpu_testbench();
 //-------------initialization--------------
 		//Clear all memory and register contents & init to zero
 		reset = 1;
-		#5 reset = 0;
+		#2 reset = 0;
 		
 		//Set memory values
 		myCPU.myDatapath.memory_instance.memoryFile[0]=10; //variable a = 10
 		myCPU.myDatapath.memory_instance.memoryFile[1]=22; //variable b = 22
-		myCPU.myDatapath.memory_instance.memoryFile[2]=6; //variable c = 6
+		myCPU.myDatapath.memory_instance.memoryFile[2]=10; //variable c = 6
 		
 //------------Load words from mem to reg--------------	
 		
@@ -42,7 +42,7 @@ module cpu_testbench();
 		newinstr=0;
 		#1 newinstr=1;
 		#1 newinstr=0;
-		#70;
+		#30;
 		
 	//lw $2,2($0);		 
 		op = 6'd35;
@@ -52,7 +52,7 @@ module cpu_testbench();
 		instrword = {op,rs,rt,imm};
 		#1 newinstr=1;
 		#1 newinstr=0;
-		#70;
+		#30;
 		 
 	//lw $3, 3($0);
 		op = 6'd35;
@@ -62,7 +62,7 @@ module cpu_testbench();
 		instrword = {op,rs,rt,imm};
 		#1 newinstr=1;
 		#1 newinstr=0;
-		#70;
+		#30;
 
 
 //--------------Add & subtract-------------------
@@ -77,7 +77,7 @@ module cpu_testbench();
 		instrword = {op,rs,rt,rd,shift,fun};
 		#1 newinstr=1;
 		#1 newinstr=0;
-		#70;
+		#30;
 
 	//sub $5, $4, $3;
 		op = 6'd00;
@@ -89,7 +89,7 @@ module cpu_testbench();
 		instrword = {op,rs,rt,rd,shift,fun};
 		#1 newinstr=1;
 		#1 newinstr=0;
-		#70;
+		#30;
 
 //-----------Store Word--------------
 
@@ -102,7 +102,7 @@ module cpu_testbench();
 		newinstr=0;
 		#1 newinstr=1;
 		#1 newinstr=0;
-		#70;
+		#30;
 
 
 
@@ -115,7 +115,7 @@ module cpu_testbench();
 		
 	
 
-	$finish;
+		$finish;
 
 
 	end
