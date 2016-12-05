@@ -29,7 +29,7 @@ module cpu_testbench();
 		//Set memory values
 		myCPU.myDatapath.memory_instance.memoryFile[0]=10; //variable a = 10
 		myCPU.myDatapath.memory_instance.memoryFile[1]=22; //variable b = 22
-		myCPU.myDatapath.memory_instance.memoryFile[2]=10; //variable c = 6
+		myCPU.myDatapath.memory_instance.memoryFile[2]=6; //variable c = 6
 		
 //------------Load words from mem to reg--------------	
 		
