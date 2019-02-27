@@ -1,2 +1,5 @@
-# Computer Architecture Project
-The University of Texas at El Paso
+# Basic MIPS MCU simulation written in Verilog
+Includes:
+- ALU
+- Two-to-One Mux
+- Memory
